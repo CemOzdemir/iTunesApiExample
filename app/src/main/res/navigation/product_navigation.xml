@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/product_navigation"
+    app:startDestination="@id/productListFragment">
+
+    <fragment
+        android:id="@+id/productListFragment"
+        android:name="com.e.itunesapiexample.feature.productlist.ProductListFragment"
+        android:label="fragment_product_list"
+        tools:layout="@layout/fragment_product_list">
+        <action
+            android:id="@+id/action_to_productDetailFragment"
+            app:destination="@id/productDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/productDetailFragment"
+        android:name="com.e.itunesapiexample.feature.productdetail.ProductDetailFragment"
+        android:label="ProductDetailFragment">
+        <action
+            android:id="@+id/action_to_productListFragment"
+            app:destination="@id/productListFragment" />
+        <argument
+            android:name="productId"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+</navigation>

@@ -1,5 +1,7 @@
 package com.e.itunesapiexample.base
 
+import com.e.itunesapiexample.feature.productlist.ProductListResponse
+import io.reactivex.Single
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -7,7 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class ProductApiService {
 
     private companion object {
-        private const val BASE_URL = "https://s3-eu-west-1.amazonaws.com"
+        private const val BASE_URL = "https://itunes.apple.com/"
     }
 
     private val api = Retrofit.Builder()
@@ -17,7 +19,7 @@ class ProductApiService {
         .build()
         .create(ProductApi::class.java)
 
-//    fun getProducts(): Single<ProductListResponse> = api.getProducts()
+    fun getProducts(): Single<ProductListResponse> = api.getProducts("jack johnson")
 //
 //    fun getProductDetail(productId: String?): Single<ProductModel> = api.getProductDetail(productId)
 }
