@@ -38,9 +38,7 @@ class ProductListFragment : Fragment() {
         viewModel = ViewModelProviders.of(this).get(ProductListViewModel::class.java).apply {
             binding.viewModel = this
             submitListToAdapterLiveData.observe(viewLifecycleOwner, productListLiveDataObserver)
-            getProducts()
         }
-
         binding.productList.apply {
             layoutManager = GridLayoutManager(context, 2)
             adapter = productListAdapter

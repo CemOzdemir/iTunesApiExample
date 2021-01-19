@@ -23,8 +23,8 @@
             android:id="@+id/action_to_productListFragment"
             app:destination="@id/productListFragment" />
         <argument
-            android:name="productId"
-            app:argType="string"
-            app:nullable="true" />
+            android:name="product"
+            app:argType="com.e.itunesapiexample.feature.productdetail.ProductModel"
+            app:nullable="false" />
     </fragment>
 </navigation>

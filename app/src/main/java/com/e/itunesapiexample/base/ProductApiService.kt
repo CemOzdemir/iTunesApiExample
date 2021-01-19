@@ -19,7 +19,7 @@ class ProductApiService {
         .build()
         .create(ProductApi::class.java)
 
-    fun getProducts(): Single<ProductListResponse> = api.getProducts("jack johnson")
+    fun getProducts(searchTerm: String): Single<ProductListResponse> = api.getProducts(searchTerm)
 //
 //    fun getProductDetail(productId: String?): Single<ProductModel> = api.getProductDetail(productId)
 }

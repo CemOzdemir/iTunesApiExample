@@ -23,7 +23,7 @@ class ProductDetailFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(ProductDetailViewModel::class.java)
-//        arguments?.let { viewModel.getProductDetail(ProductDetailFragmentArgs.fromBundle(it).productId) }
         binding.viewModel = viewModel
+        arguments?.let { viewModel.handleProductDetail(ProductDetailFragmentArgs.fromBundle(it).product) }
     }
 }

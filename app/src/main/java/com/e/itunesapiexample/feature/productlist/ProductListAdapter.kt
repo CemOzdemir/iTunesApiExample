@@ -28,8 +28,8 @@ class ProductListAdapter(private var productList: ArrayList<ProductModel>):
             product_price.text = product.price
             product_image.loadImage(product.artworkUrl100)
             container.setOnClickListener {
-//                val action = ProductListFragmentDirections.actionToProductDetailFragment(product.productId)
-//                Navigation.findNavController(it).navigate(action)
+                val action = ProductListFragmentDirections.actionToProductDetailFragment(product)
+                Navigation.findNavController(it).navigate(action)
             }
         }
     }
