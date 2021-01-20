@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingVertical="12dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
@@ -19,18 +20,41 @@
         android:id="@+id/product_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textAlignment="center"
+        android:gravity="start"
+        android:paddingVertical="4dp"
+        android:includeFontPadding="false"
+        android:fontFamily="@font/notosans_bold"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@id/product_image"
         app:layout_constraintTop_toBottomOf="@id/product_image"
-        app:layout_constraintEnd_toEndOf="@id/product_image"/>
+        app:layout_constraintEnd_toEndOf="@id/product_image"
+        tools:text="Oceans 8"/>
 
     <TextView
         android:id="@+id/product_price"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textAlignment="center"
+        android:gravity="start"
+        android:includeFontPadding="false"
+        android:textSize="12sp"
+        android:paddingVertical="2dp"
         app:layout_constraintStart_toStartOf="@id/product_image"
         app:layout_constraintTop_toBottomOf="@id/product_name"
-        app:layout_constraintEnd_toEndOf="@id/product_image"/>
+        app:layout_constraintEnd_toEndOf="@id/product_image"
+        tools:text="14.99 USD"/>
+
+    <TextView
+        android:id="@+id/product_release_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:includeFontPadding="false"
+        android:fontFamily="@font/notosans_light"
+        android:textSize="12sp"
+        android:paddingVertical="2dp"
+        app:layout_constraintStart_toStartOf="@id/product_image"
+        app:layout_constraintTop_toBottomOf="@id/product_price"
+        app:layout_constraintEnd_toEndOf="@id/product_image"
+        tools:text="08.06.2018"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

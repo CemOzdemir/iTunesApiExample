@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.e.itunesapiexample.feature.productdetail.ProductDetailViewModel" />
@@ -11,36 +12,90 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent" >
 
-        <ImageView
-            android:id="@+id/product_image"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:imageUrl="@{viewModel.productImageUrlObservable}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/card_view">
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/product_image"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:maxHeight="400dp"
+                android:adjustViewBounds="true"
+                android:imageUrl="@{viewModel.productImageUrlObservable}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/product_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.productNameObservable}"
+                android:gravity="start"
+                android:fontFamily="@font/notosans_bold"
+                android:paddingHorizontal="20dp"
+                app:layout_constraintEnd_toEndOf="@id/product_image"
+                app:layout_constraintStart_toStartOf="@id/product_image"
+                app:layout_constraintTop_toBottomOf="@id/product_image"
+                tools:text="Oceans 8"/>
+
+            <TextView
+                android:id="@+id/product_description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.productDescriptionObservable}"
+                android:gravity="start"
+                android:textSize="12sp"
+                android:paddingHorizontal="20dp"
+                app:layout_constraintEnd_toEndOf="@id/product_image"
+                app:layout_constraintStart_toStartOf="@id/product_image"
+                app:layout_constraintTop_toBottomOf="@id/product_name" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_card_view"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:cardCornerRadius="4dp"
+        app:cardElevation="20dp"
+        app:cardPreventCornerOverlap="false" >
         <TextView
-            android:id="@+id/product_name"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:text="@{viewModel.productNameObservable}"
-            app:layout_constraintEnd_toEndOf="@id/product_image"
-            app:layout_constraintStart_toStartOf="@id/product_image"
-            app:layout_constraintTop_toBottomOf="@id/product_image" />
-
-        <TextView
-            android:id="@+id/product_description"
-            android:layout_width="0dp"
+            android:layout_gravity="start|center_vertical"
+            android:fontFamily="@font/notosans_bold"
+            android:textSize="16sp"
+            android:gravity="start|center_vertical"
+            android:layout_marginHorizontal="20dp"
+            android:text="@{viewModel.productPriceObservable}"
+            tools:text="953.00 USD" />
+        <Button
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:text="@{viewModel.productDescriptionObservable}"
-            app:layout_constraintEnd_toEndOf="@id/product_image"
-            app:layout_constraintStart_toStartOf="@id/product_image"
-            app:layout_constraintTop_toBottomOf="@id/product_name" />
-
+            android:backgroundTint="@color/color_secondary"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginVertical="10dp"
+            android:textAllCaps="false"
+            android:text="@string/buy_button_text"
+            android:textSize="12sp"
+            android:layout_gravity="end|center_vertical"/>
+    </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

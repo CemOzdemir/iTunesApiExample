@@ -94,13 +94,6 @@
             app:layout_constraintTop_toBottomOf="@id/button_group"
             tools:listitem="@layout/item_product"/>
 
-        <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/progress_bar_top_barrier"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:barrierDirection="bottom"
-            app:constraint_referenced_ids="button_group,product_list" />
-
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -120,7 +113,7 @@
             android:visibility="@{viewModel.progressBarVisibilityObservable}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

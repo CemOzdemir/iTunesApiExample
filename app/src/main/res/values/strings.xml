@@ -7,4 +7,5 @@
     <string name="books">Books</string>
     <string name="enter_text">Enter 3 or more letter to search.</string>
     <string name="no_result">No result for \"%1$s\".</string>
+    <string name="buy_button_text">BUY (Coming Soon!)</string>
 </resources>

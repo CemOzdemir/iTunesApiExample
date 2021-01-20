@@ -36,7 +36,7 @@ class ProductListViewModel : ViewModel() {
     val submitListToAdapterLiveData = MutableLiveData<List<ProductModel>>()
     val handleNoResultTextLiveData = MutableLiveData<String>()
 
-    private var productList = arrayListOf<ProductModel>()
+    var productList = arrayListOf<ProductModel>()
     var selectedCategory = ProductModel.WrapperType.MOVIE
 
     fun getResults(searchOffset: Int = 0) {

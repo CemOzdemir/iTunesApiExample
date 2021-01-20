@@ -33,9 +33,14 @@ class ProductListFragment : Fragment() {
     }
 
     private val handleNoResultTextLiveDataObserver = Observer<String> {
-        when (it.length) {
-            in 0..2 -> viewModel.noResultTextObservable.set(context?.getString(R.string.enter_text))
-            else -> viewModel.noResultTextObservable.set(context?.resources?.getString(R.string.no_result, it))
+        viewModel.run {
+            when (it.length) {
+                in 0..2 -> {
+                    productList.clear()
+                    noResultTextObservable.set(context?.getString(R.string.enter_text))
+                }
+                else -> noResultTextObservable.set(context?.resources?.getString(R.string.no_result, it))
+            }
         }
     }
 
@@ -72,7 +77,10 @@ class ProductListFragment : Fragment() {
                 binding.appButton.id -> viewModel.selectedCategory = ProductModel.WrapperType.SOFTWARE
                 binding.bookButton.id -> viewModel.selectedCategory = ProductModel.WrapperType.EBOOK
             }
-            viewModel.getResults()
+            viewModel.run {
+                productList.clear()
+                viewModel.getResults()
+            }
         }
     }
 
