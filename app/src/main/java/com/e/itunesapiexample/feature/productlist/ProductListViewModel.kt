@@ -1,5 +1,6 @@
 package com.e.itunesapiexample.feature.productlist
 
+import android.view.View
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
@@ -20,19 +21,22 @@ class ProductListViewModel: ViewModel() {
     private var disposable = CompositeDisposable()
     private var apiService = ProductApiService()
 
-    var searchTermObservable: String? by Delegates.observable("") { _, _, newValue ->
-        getResults(newValue)
+    var searchTermObservable: String? by Delegates.observable("") { _, _, _ ->
+        getResults()
     }
     var progressBarVisibilityObservable = ObservableBoolean(false)
+    var productListVisibilityObservable = ObservableBoolean(false)
+
     val submitListToAdapterLiveData = MutableLiveData<List<ProductModel>>()
 
     private var productList: ArrayList<ProductModel>? = null
+    var selectedCategory = ProductModel.WrapperType.MOVIE
 
-    private fun getResults(searchTerm: String?) {
-        searchTerm?.takeIf { it.length >= MIN_CHAR_TO_SEARCH }?.run {
-            progressBarVisibilityObservable.set(false)
+    fun getResults() {
+        searchTermObservable?.takeIf { it.length >= MIN_CHAR_TO_SEARCH }?.run {
+            progressBarVisibilityObservable.set(true)
             disposable.add(
-                    apiService.getProducts(this)
+                    apiService.getProducts(this, getQueryTextForCategory())
                             .subscribeOn(Schedulers.newThread())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribeWith(object : DisposableSingleObserver<ProductListResponse>() {
@@ -40,8 +44,8 @@ class ProductListViewModel: ViewModel() {
                                     listResponse.results?.let {
                                         productList = ArrayList(it)
                                         submitListToAdapterLiveData.value = listResponse.results
-                                    }
-                                    sortProductsByPrice(false)
+                                        productListVisibilityObservable.set(true)
+                                    }?: productListVisibilityObservable.set(false)
                                     progressBarVisibilityObservable.set(false)
                                 }
 
@@ -50,12 +54,17 @@ class ProductListViewModel: ViewModel() {
                                 }
                             })
             )
-        }
+        } ?: productListVisibilityObservable.set(false)
     }
 
-    fun sortProductsByPrice(ascendingOrder: Boolean) {
-        var sortedList = productList?.sortedByDescending { it.price?.toInt() }
-        if (ascendingOrder) sortedList = sortedList?.asReversed()
-        submitListToAdapterLiveData.value = sortedList
+    fun changeCategory(category: ProductModel.WrapperType) {
+        submitListToAdapterLiveData.value = productList?.filter { it.wrapperType == category }
+    }
+
+    private fun getQueryTextForCategory() = when(selectedCategory) {
+        ProductModel.WrapperType.MOVIE -> "movie"
+        ProductModel.WrapperType.MUSIC -> "music"
+        ProductModel.WrapperType.SOFTWARE -> "software"
+        ProductModel.WrapperType.EBOOK -> "ebook"
     }
 }
