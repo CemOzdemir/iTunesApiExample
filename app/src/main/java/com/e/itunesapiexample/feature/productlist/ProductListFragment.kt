@@ -47,38 +47,12 @@ class ProductListFragment : Fragment() {
             binding.viewModel = this
             submitListToAdapterLiveData.observe(viewLifecycleOwner, productListLiveDataObserver)
         }
-        binding.productList.apply {
-            layoutManager = GridLayoutManager(context, 2)
-            adapter = productListAdapter
-        }
         binding.run {
             productList.run {
                 layoutManager = GridLayoutManager(context, 2)
                 adapter = productListAdapter
             }
-            movieButton.run {
-                tag = MOVIES_BUTTON_TAG
-                setOnClickListener(groupButtonClickListener)
-            }
-            musicButton.run {
-                tag = MUSIC_BUTTON_TAG
-                setOnClickListener(groupButtonClickListener)
-            }
-            appButton.run {
-                tag = APPS_BUTTON_TAG
-                setOnClickListener(groupButtonClickListener)
-            }
-            bookButton.run {
-                tag = BOOKS_BUTTON_TAG
-                setOnClickListener(groupButtonClickListener)
-            }
             buttonGroup.addOnButtonCheckedListener(categoryChangeListener)
-        }
-    }
-
-    private val groupButtonClickListener = View.OnClickListener { button ->
-        button.tag?.takeIf { it is ProductModel.WrapperType }?.run {
-            viewModel.changeCategory(this as ProductModel.WrapperType)
         }
     }
 

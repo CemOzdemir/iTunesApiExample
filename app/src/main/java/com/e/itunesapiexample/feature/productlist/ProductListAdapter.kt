@@ -23,7 +23,7 @@ class ProductListAdapter(private var productList: ArrayList<ProductModel>):
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val product = productList[position]
-        holder.view.apply {
+        holder.view.run {
             product_name.text = product.collectionName
             product_price.text = product.price
             product_image.loadImage(product.artworkUrl100)
