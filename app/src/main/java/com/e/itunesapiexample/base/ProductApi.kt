@@ -11,5 +11,6 @@ interface ProductApi {
     @GET("search")
     fun getProducts(@Query("term") searchTerm: String?,
                     @Query("media") category: String?,
+                    @Query("offset") offset: String?,
                     @Query("limit") maxItem: String?): Single<ProductListResponse>
 }

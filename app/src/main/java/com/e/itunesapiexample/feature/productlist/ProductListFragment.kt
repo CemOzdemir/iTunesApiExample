@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.e.itunesapiexample.R
 import com.e.itunesapiexample.databinding.FragmentProductListBinding
 import com.e.itunesapiexample.feature.productdetail.ProductModel
@@ -16,11 +17,8 @@ import com.google.android.material.button.MaterialButtonToggleGroup
 
 class ProductListFragment : Fragment() {
 
-    private companion object {
-        private val MOVIES_BUTTON_TAG = ProductModel.WrapperType.MOVIE
-        private val MUSIC_BUTTON_TAG = ProductModel.WrapperType.MUSIC
-        private val APPS_BUTTON_TAG = ProductModel.WrapperType.SOFTWARE
-        private val BOOKS_BUTTON_TAG = ProductModel.WrapperType.EBOOK
+    companion object {
+        private const val DIRECTION_BOTTOM = 1
     }
 
     private lateinit var viewModel: ProductListViewModel
@@ -31,6 +29,13 @@ class ProductListFragment : Fragment() {
     private val productListLiveDataObserver = Observer<List<ProductModel>> { list ->
         list?.let {
             productListAdapter.submitList(ArrayList(list))
+        }
+    }
+
+    private val handleNoResultTextLiveDataObserver = Observer<String> {
+        when (it.length) {
+            in 0..2 -> viewModel.noResultTextObservable.set(context?.getString(R.string.enter_text))
+            else -> viewModel.noResultTextObservable.set(context?.resources?.getString(R.string.no_result, it))
         }
     }
 
@@ -46,13 +51,16 @@ class ProductListFragment : Fragment() {
         viewModel = ViewModelProviders.of(this).get(ProductListViewModel::class.java).apply {
             binding.viewModel = this
             submitListToAdapterLiveData.observe(viewLifecycleOwner, productListLiveDataObserver)
+            handleNoResultTextLiveData.observe(viewLifecycleOwner, handleNoResultTextLiveDataObserver)
         }
+        viewModel.noResultTextObservable.set(context?.getString(R.string.enter_text))
         binding.run {
             productList.run {
                 layoutManager = GridLayoutManager(context, 2)
                 adapter = productListAdapter
             }
             buttonGroup.addOnButtonCheckedListener(categoryChangeListener)
+            productList.addOnScrollListener(onScrollChangeListener)
         }
     }
 
@@ -65,6 +73,15 @@ class ProductListFragment : Fragment() {
                 binding.bookButton.id -> viewModel.selectedCategory = ProductModel.WrapperType.EBOOK
             }
             viewModel.getResults()
+        }
+    }
+
+    private val onScrollChangeListener = object : RecyclerView.OnScrollListener() {
+        override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+            super.onScrollStateChanged(recyclerView, newState)
+            if (!recyclerView.canScrollVertically(DIRECTION_BOTTOM) && newState==RecyclerView.SCROLL_STATE_IDLE) {
+                viewModel.loadMoreResult()
+            }
         }
     }
 }

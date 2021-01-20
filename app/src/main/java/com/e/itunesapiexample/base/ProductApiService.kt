@@ -24,6 +24,7 @@ class ProductApiService {
     fun getProducts(
             searchTerm: String,
             category: String,
+            offset: String = "0",
             maxItemCount: String = MAX_ITEM_PER_REQUEST
-    ): Single<ProductListResponse> = api.getProducts(searchTerm, category, maxItemCount)
+    ): Single<ProductListResponse> = api.getProducts(searchTerm, category, offset, maxItemCount)
 }
