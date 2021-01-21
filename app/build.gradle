@@ -66,9 +66,9 @@ dependencies {
     implementation 'com.google.dagger:dagger-android-support:2.14.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
-    testImplementation "org.mockito:mockito-inline:2.14.1"
     testImplementation "android.arch.core:core-testing:1.1.1"
     testImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0'
+    testImplementation 'org.mockito:mockito-inline:2.13.0'
     kaptTest "com.google.dagger:dagger-compiler:2.14.1"
 
     kapt 'com.google.dagger:dagger-compiler:2.14.1'

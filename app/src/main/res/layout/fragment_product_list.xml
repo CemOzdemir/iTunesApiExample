@@ -104,7 +104,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/button_group"
             app:layout_constraintEnd_toEndOf="parent"
-            android:visibility="@{!viewModel.productListVisibilityObservable}" />
+            android:visibility="@{!viewModel.productListVisibilityObservable &amp;&amp; !viewModel.progressBarVisibilityObservable}" />
 
         <ProgressBar
             android:id="@+id/progress_bar"

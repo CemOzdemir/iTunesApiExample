@@ -79,7 +79,7 @@ class ProductListFragment : Fragment() {
             }
             viewModel.run {
                 productList.clear()
-                viewModel.getResults()
+                viewModel.getSearchResults()
             }
         }
     }

@@ -15,7 +15,7 @@ class ProductDetailFragment : Fragment() {
     private lateinit var viewModel: ProductDetailViewModel
     private lateinit var binding: FragmentProductDetailBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_product_detail, container, false)
         return binding.root
     }
