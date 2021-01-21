@@ -10,6 +10,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 import kotlin.properties.Delegates
 
 class ProductListViewModel : ViewModel() {
@@ -22,8 +23,10 @@ class ProductListViewModel : ViewModel() {
         private const val CATEGORY_SEARCH_KEY_EBOOK = "ebook"
     }
 
+    @Inject
+    lateinit var apiService: ProductApiService
+
     private var disposable = CompositeDisposable()
-    private var apiService = ProductApiService()
 
     var searchTermObservable: String? by Delegates.observable("") { _, _, newText ->
         handleNoResultTextLiveData.value = newText
@@ -38,6 +41,10 @@ class ProductListViewModel : ViewModel() {
 
     var productList = arrayListOf<ProductModel>()
     var selectedCategory = ProductModel.WrapperType.MOVIE
+
+    init {
+        DaggerProductListViewModelComponent.create().inject(this)
+    }
 
     fun getResults(searchOffset: Int = 0) {
         searchTermObservable?.takeIf { it.length >= MIN_CHAR_TO_SEARCH }?.run {
