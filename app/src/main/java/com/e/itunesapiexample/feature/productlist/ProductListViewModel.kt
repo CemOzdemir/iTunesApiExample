@@ -2,6 +2,7 @@ package com.e.itunesapiexample.feature.productlist
 
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.e.itunesapiexample.base.ProductApiService
@@ -28,15 +29,17 @@ class ProductListViewModel : ViewModel() {
     private var disposable = CompositeDisposable()
 
     var searchTermObservable: String? by Delegates.observable("") { _, _, newText ->
-        handleNoResultTextLiveData.value = newText
+        handleNoResultText.value = newText
         getSearchResults()
     }
     var progressBarVisibilityObservable = ObservableBoolean(false)
     var productListVisibilityObservable = ObservableBoolean(false)
     var noResultTextObservable = ObservableField<String>()
 
-    val submitListToAdapterLiveData = MutableLiveData<List<ProductModel>>()
-    val handleNoResultTextLiveData = MutableLiveData<String>()
+    private val submitListToAdapter = MutableLiveData<List<ProductModel>>()
+    val submitListToAdapterLiveData: LiveData<List<ProductModel>> get() = submitListToAdapter
+    private val handleNoResultText = MutableLiveData<String>()
+    val handleNoResultTextLiveData: MutableLiveData<String> get() = handleNoResultText
 
     var productList = arrayListOf<ProductModel>()
     var selectedCategory = ProductModel.WrapperType.MOVIE
@@ -76,7 +79,7 @@ class ProductListViewModel : ViewModel() {
     fun handleSearchResults(listResponse: ProductListResponse?, searchOffset: Int) {
         listResponse?.results?.let {
             if (searchOffset > 0) productList.addAll(it) else productList = ArrayList(it)
-            submitListToAdapterLiveData.value = productList
+            submitListToAdapter.value = productList
         }
         productListVisibilityObservable.set(productList.isNotEmpty())
         progressBarVisibilityObservable.set(false)

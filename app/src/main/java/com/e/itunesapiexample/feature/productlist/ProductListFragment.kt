@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,24 +25,6 @@ class ProductListFragment : Fragment() {
 
     private val productListAdapter = ProductListAdapter(arrayListOf())
 
-    private val productListLiveDataObserver = Observer<List<ProductModel>> { list ->
-        list?.let {
-            productListAdapter.submitList(ArrayList(list))
-        }
-    }
-
-    private val handleNoResultTextLiveDataObserver = Observer<String> {
-        viewModel.run {
-            when (it.length) {
-                in 0..2 -> {
-                    productList.clear()
-                    noResultTextObservable.set(context?.getString(R.string.enter_text))
-                }
-                else -> noResultTextObservable.set(context?.resources?.getString(R.string.no_result, it))
-            }
-        }
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_product_list, container, false)
@@ -55,9 +36,29 @@ class ProductListFragment : Fragment() {
 
         viewModel = ViewModelProviders.of(this).get(ProductListViewModel::class.java).apply {
             binding.viewModel = this
-            submitListToAdapterLiveData.observe(viewLifecycleOwner, productListLiveDataObserver)
-            handleNoResultTextLiveData.observe(viewLifecycleOwner, handleNoResultTextLiveDataObserver)
         }
+        setViewProperties()
+        observeViewModel()
+    }
+
+    private fun observeViewModel() {
+        viewModel.run {
+            submitListToAdapterLiveData.observe(viewLifecycleOwner, { list ->
+                list?.let { productListAdapter.submitList(ArrayList(list)) }
+            })
+            handleNoResultTextLiveData.observe(viewLifecycleOwner, {
+                when (it.length) {
+                    in 0..2 -> {
+                        productList.clear()
+                        noResultTextObservable.set(context?.getString(R.string.enter_text))
+                    }
+                    else -> noResultTextObservable.set(context?.resources?.getString(R.string.no_result, it))
+                }
+            })
+        }
+    }
+
+    private fun setViewProperties() {
         viewModel.noResultTextObservable.set(context?.getString(R.string.enter_text))
         binding.run {
             productList.run {

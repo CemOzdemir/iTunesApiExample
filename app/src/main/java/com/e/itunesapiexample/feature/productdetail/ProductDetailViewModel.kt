@@ -22,7 +22,7 @@ class ProductDetailViewModel : ViewModel() {
     private fun getAvailableDescription(product: ProductModel) = when {
         product.description?.isNotBlank() == true -> product.description
         product.shortDescription?.isNotBlank() == true -> product.shortDescription
-        product.primaryGenreName?.isNotBlank() == true -> product.description
+        product.primaryGenreName?.isNotBlank() == true -> product.primaryGenreName
         else -> ""
     }
 }
