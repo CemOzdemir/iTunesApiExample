@@ -1,6 +1,6 @@
 iTunes Api Example
     
-- It's a Android App for searching movies, music, apps and book on iTunes.
+- It's an Android App for searching movies, music, apps and book on iTunes.
 
 Created Using...
 - Kotlin
