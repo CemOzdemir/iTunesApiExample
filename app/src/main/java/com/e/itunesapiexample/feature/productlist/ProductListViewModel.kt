@@ -1,5 +1,6 @@
 package com.e.itunesapiexample.feature.productlist
 
+import android.os.Handler
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
@@ -17,6 +18,8 @@ class ProductListViewModel : ViewModel() {
 
     private companion object {
         private const val MIN_CHAR_TO_SEARCH = 3
+        private const val SEARCH_DELAY = 500L
+
         private const val CATEGORY_SEARCH_KEY_MOVIE = "movie"
         private const val CATEGORY_SEARCH_KEY_MUSIC = "music"
         private const val CATEGORY_SEARCH_KEY_SOFTWARE = "software"
@@ -26,11 +29,18 @@ class ProductListViewModel : ViewModel() {
     @Inject
     lateinit var apiService: ProductApiService
 
-    private var disposable = CompositeDisposable()
+    var disposable = CompositeDisposable()
 
-    var searchTermObservable: String? by Delegates.observable("") { _, _, newText ->
-        handleNoResultText.value = newText
-        getSearchResults()
+    var handler = Handler()
+
+    var searchTermObservable: String? by Delegates.observable("") { _, oldText, newText ->
+        if (newText?.trim() != oldText?.trim()) {
+            handler.removeCallbacksAndMessages(null)
+            handler.postDelayed({
+                handleNoResultText.value = newText
+                getSearchResults()
+            }, SEARCH_DELAY)
+        }
     }
     var progressBarVisibilityObservable = ObservableBoolean(false)
     var productListVisibilityObservable = ObservableBoolean(false)
@@ -53,8 +63,8 @@ class ProductListViewModel : ViewModel() {
      * e.g. if we got 20 results at hand, search will bring results starting from 20. result.
      */
     fun getSearchResults(searchOffset: Int = 0) {
-        searchTermObservable?.takeIf { it.length >= MIN_CHAR_TO_SEARCH }?.run {
-            sendSearchRequest(this, searchOffset)
+        searchTermObservable?.takeIf { it.trim().length >= MIN_CHAR_TO_SEARCH }?.run {
+            sendSearchRequest(this.trim(), searchOffset)
         } ?: productListVisibilityObservable.set(false)
     }
 
@@ -68,6 +78,7 @@ class ProductListViewModel : ViewModel() {
 
     private fun sendSearchRequest(searchTerm: String, searchOffset: Int) {
         progressBarVisibilityObservable.set(true)
+        disposable.clear()
         disposable.add(
                 apiService.getProducts(searchTerm, getQueryTextForCategory(), searchOffset.toString())
                         .subscribeOn(Schedulers.newThread())

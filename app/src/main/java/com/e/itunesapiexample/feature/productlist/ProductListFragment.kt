@@ -47,7 +47,7 @@ class ProductListFragment : Fragment() {
                 list?.let { productListAdapter.submitList(ArrayList(list)) }
             })
             handleNoResultTextLiveData.observe(viewLifecycleOwner, {
-                when (it.length) {
+                when (it.trim().length) {
                     in 0..2 -> {
                         productList.clear()
                         noResultTextObservable.set(context?.getString(R.string.enter_text))
@@ -80,6 +80,7 @@ class ProductListFragment : Fragment() {
             }
             viewModel.run {
                 productList.clear()
+                productListAdapter.submitList(arrayListOf())
                 viewModel.getSearchResults()
             }
         }
@@ -92,5 +93,15 @@ class ProductListFragment : Fragment() {
                 viewModel.loadMoreResult()
             }
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.disposable.clear()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.disposable.dispose()
     }
 }

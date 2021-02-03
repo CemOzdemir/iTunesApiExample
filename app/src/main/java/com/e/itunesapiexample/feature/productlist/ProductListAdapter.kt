@@ -6,9 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
+import com.e.itunesapiexample.EMPTY
 import com.e.itunesapiexample.R
 import com.e.itunesapiexample.feature.productdetail.ProductModel
 import com.e.itunesapiexample.loadImage
+import com.e.itunesapiexample.setTextOrHide
 import kotlinx.android.synthetic.main.item_product.view.*
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -28,9 +30,10 @@ class ProductListAdapter(private var productList: ArrayList<ProductModel>):
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val product = productList[position]
         holder.view.run {
-            product_name.text = product.collectionName.takeIf { it?.isNotBlank() == true } ?: product.trackName
-            product_price.text = if (product.collectionPrice?.isNotBlank() == true) "${product.collectionPrice} ${product.currency}" else ""
-            product_release_date.text = getFormattedDate(product.releaseDate)
+            collection_name.setTextOrHide(product.collectionName)
+            track_name.setTextOrHide(product.trackName)
+            product_price.setTextOrHide(getFormattedPrice(product))
+            product_release_date.setTextOrHide(getFormattedDate(product.releaseDate))
             product_image.loadImage(product.artworkUrl100)
             container.setOnClickListener {
                 val action = ProductListFragmentDirections.actionToProductDetailFragment(product)
@@ -49,4 +52,10 @@ class ProductListAdapter(private var productList: ArrayList<ProductModel>):
     private fun getFormattedDate(date: String?) = LocalDateTime.parse(
         date, DateTimeFormatter.ISO_DATE_TIME
     ).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
+
+    private fun getFormattedPrice(product: ProductModel) = if (product.collectionPrice?.isNotBlank() == true) {
+        "${product.collectionPrice} ${product.currency}"
+    } else {
+        EMPTY
+    }
 }
