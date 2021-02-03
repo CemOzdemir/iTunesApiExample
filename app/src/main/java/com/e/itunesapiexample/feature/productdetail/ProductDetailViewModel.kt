@@ -1,5 +1,6 @@
 package com.e.itunesapiexample.feature.productdetail
 
+import android.text.Html
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 
@@ -20,9 +21,11 @@ class ProductDetailViewModel : ViewModel() {
     }
 
     private fun getAvailableDescription(product: ProductModel) = when {
-        product.description?.isNotBlank() == true -> product.description
-        product.shortDescription?.isNotBlank() == true -> product.shortDescription
+        product.description?.isNotBlank() == true -> getTextFromHtml(product.description)
+        product.shortDescription?.isNotBlank() == true -> getTextFromHtml(product.shortDescription)
         product.primaryGenreName?.isNotBlank() == true -> product.primaryGenreName
         else -> ""
     }
+
+    private fun getTextFromHtml(htmlText: String) =  Html.fromHtml(htmlText, Html.FROM_HTML_MODE_LEGACY).toString()
 }
